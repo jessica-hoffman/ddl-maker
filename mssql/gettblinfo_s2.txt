@@ -1,0 +1,4 @@
+)
+GROUP BY TABLE_CATALOG, TABLE_SCHEMA, TableName, NumRows, ReservedSpace_GB
+ 
+ORDER BY TableName ,ReservedSpace_GB desc

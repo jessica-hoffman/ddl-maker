@@ -1,0 +1,63 @@
+with maxord_position as 
+
+(select TABLE_NAME, MAX(ORDINAL_POSITION) max_ord_position 
+
+FROM INFORMATION_SCHEMA.COLUMNS 
+
+group by TABLE_NAME) 
+
+select  
+
+case when ORDINAL_POSITION = 1 then 'create or replace table EDP_LANDING.LN_CADENCE.T_'+c.TABLE_NAME+' (' else '' end +  
+
+'  ' + column_name + ' ' + 
+
+case when DATA_TYPE = 'nvarchar' then 'varchar('+CONVERT(VARCHAR(6),(case when CHARACTER_MAXIMUM_LENGTH = -1 then 8000 else CHARACTER_MAXIMUM_LENGTH end))+' char)'  
+
+     when DATA_TYPE = 'varchar' then 'varchar('+CONVERT(VARCHAR(6),(case when CHARACTER_MAXIMUM_LENGTH = -1 then 8000 else CHARACTER_MAXIMUM_LENGTH end))+' char)'  
+
+     when DATA_TYPE = 'char' then 'char('+CONVERT(VARCHAR(6),(case when CHARACTER_MAXIMUM_LENGTH = -1 then 8000 else CHARACTER_MAXIMUM_LENGTH end))+' char)'  
+
+     when DATA_TYPE = 'nchar' then 'char('+CONVERT(VARCHAR(6),(case when CHARACTER_MAXIMUM_LENGTH = -1 then 8000 else CHARACTER_MAXIMUM_LENGTH end))+' char)'  
+
+     when DATA_TYPE in ('binary','varbinary','hierarchyid') then 'char('+CONVERT(VARCHAR(6),(case when CHARACTER_MAXIMUM_LENGTH = -1 then 8000 else CHARACTER_MAXIMUM_LENGTH end))+' char)'  
+
+     when DATA_TYPE = 'numeric' then 'NUMBER('+CONVERT(VARCHAR(6),NUMERIC_PRECISION)+','+CONVERT(VARCHAR(6),NUMERIC_SCALE)+')'       
+
+     when DATA_TYPE = 'decimal' then 'NUMBER('+CONVERT(VARCHAR(6),NUMERIC_PRECISION)+','+CONVERT(VARCHAR(6),NUMERIC_SCALE)+')'       
+
+     when DATA_TYPE = 'int' then 'NUMBER(10)' 
+
+     when DATA_TYPE = 'tinyint' then 'NUMBER(3)'   
+
+     when DATA_TYPE = 'smallint' then 'NUMBER(5)'   
+
+     when DATA_TYPE = 'money' then 'NUMBER(19,4)' 
+
+     when DATA_TYPE = 'smallmoney' then 'NUMBER(10,4)'           
+
+     when DATA_TYPE = 'float' then 'NUMBER'   
+
+     when DATA_TYPE = 'bigint' then 'NUMBER(19)'     
+
+     when DATA_TYPE = 'uniqueidentifier' then 'CHAR(36)'     
+
+     when DATA_TYPE in ('datetime','datetime2','smalldatetime', 
+
+                        'datetimeoffset','date','time') then 'TIMESTAMP'   
+
+     when DATA_TYPE = 'image' then 'BLOB' 
+
+     when DATA_TYPE = 'bit' then 'CHAR(1 CHAR)' 
+
+     when DATA_TYPE in ('xml','text') then 'CLOB' 
+
+end + '    ' + case when is_nullable = 'NO' then 'not null,' else 'null,' end + 
+
+case when ORDINAL_POSITION = max_ord_position then ' EDP_LOAD_DTTM TIMESTAMP, EDP_DATA_DT DATE, EDP_RUN_ID INTEGER, EDP_HASH_VALUE VARCHAR, PRIMARY KEY ());' else '' end create_table_statement, c.* 
+
+FROM INFORMATION_SCHEMA.COLUMNS c 
+
+     inner join maxord_position p on p.TABLE_NAME = c.TABLE_NAME 
+
+WHERE c.TABLE_NAME in (

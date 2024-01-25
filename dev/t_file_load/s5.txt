@@ -1,0 +1,4 @@
+.txt' AS FILENAME
+    ,NULL AS PRE_LOAD_SQL
+    ,NULL AS POST_LOAD_SQL
+    ,'

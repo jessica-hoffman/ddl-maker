@@ -1,0 +1,13 @@
+CALL EDP_CONFIG.PUBLIC.INSERT_UPDATE_CONFIG_ENTRY('INGESTION_FRAMEWORK.T_FILE_LOAD', 
+$$
+
+MERGE INTO edp_config.ingestion_framework.t_file_load T
+
+USING
+
+(
+
+    SELECT
+    
+    'CADENCE-G2' AS APPL_GROUP
+    ,'

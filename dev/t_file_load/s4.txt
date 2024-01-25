@@ -1,0 +1,10 @@
+MERGE INTO edp_config.ingestion_framework.t_file_load T
+
+USING
+
+(
+
+    SELECT
+    
+    'CADENCE-G2' AS APPL_GROUP
+    ,'

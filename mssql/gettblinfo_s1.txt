@@ -1,0 +1,36 @@
+/*SQL FOR CHECKING FOR DATASPACE*/
+IF OBJECT_ID('tempdb..#SpaceUsed') IS NOT NULL
+                DROP TABLE #SpaceUsed
+ 
+CREATE TABLE #SpaceUsed (
+                TableName sysname
+                ,NumRows BIGINT
+                ,ReservedSpace VARCHAR(50)
+                ,DataSpace VARCHAR(50)
+                ,IndexSize VARCHAR(50)
+                ,UnusedSpace VARCHAR(50)
+                ) 
+ 
+DECLARE @str VARCHAR(500)
+SET @str =  'exec sp_spaceused ''?'''
+INSERT INTO #SpaceUsed 
+EXEC sp_msforeachtable @command1=@str
+ 
+SELECT 
+TABLE_CATALOG
+, TABLE_SCHEMA
+, REPLACE(REPLACE(TableName,'[dbo].[',''),']','') TableName
+, NumRows
+, COUNT(COLUMN_NAME) AS COL_CNT
+, ReservedSpace_GB
+FROM (
+SELECT TableName, NumRows, 
+CONVERT(numeric(18,0),REPLACE(ReservedSpace,' KB','')) / 1024 as ReservedSpace_MB,
+(CONVERT(numeric(18,0),REPLACE(ReservedSpace,' KB','')) / 1024)/1024 as ReservedSpace_GB
+, CC.*
+FROM #SpaceUsed SS
+JOIN INFORMATION_SCHEMA.COLUMNS CC
+ON REPLACE(REPLACE(SS.TableName,'[dbo].[',''),']','') COLLATE DATABASE_DEFAULT = REPLACE(REPLACE(CC.TABLE_NAME,'[dbo].[',''),']','') COLLATE DATABASE_DEFAULT 
+) SUB
+
+WHERE REPLACE(REPLACE(TableName,'[dbo].[',''),']','') IN (

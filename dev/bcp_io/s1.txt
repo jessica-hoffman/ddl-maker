@@ -1,0 +1,19 @@
+MERGE INTO edp_config.extraction_framework.t_file_bcp_io T
+
+USING
+
+(
+
+    SELECT
+
+         'MS_SQLServer' AS CONNECTION_NAME
+
+        ,'Cadence_FileOut_G2' AS APPL_GROUP
+
+        ,'SPSC-DB459SP' AS SERVERNAME
+
+        ,'CadenceAzure' AS DATABASENAME
+
+        ,'dbo' AS SCHEMANAME
+
+        ,'
