@@ -2,7 +2,7 @@
 ## jessica hoffman
 ##1/18/24
 
-from config import tablenamesCAPSLoc, sql1Loc,sql2Loc,sql3Loc,sql4Loc,sql5Loc,sql6Loc,out0Loc,out00Loc,out000Loc
+from config import tablenamesCAPSLoc, sql1Loc,sql2Loc,sql3Loc,pk1Loc,pk2Loc,sql5Loc,sql6Loc,out0Loc,out00Loc,out000Loc
 
 #READ IN TABLE NAMES
 tn = open(tablenamesCAPSLoc,'r')
@@ -38,11 +38,13 @@ def sql_get_ddl_maker():
         
 #MS SQL GET PK MAKER
 def sql_get_pk_maker():
-    with open(sql4Loc,'r') as string:
-        sql4 = string.read()
+    with open(pk1Loc,'r') as string:
+        pk1 = string.read()
+    with open(pk2Loc,'r') as string:
+        pk2 = string.read()
 
     with open(out00Loc,'w') as f:
-        print(''.join([sql4,tables_string,")order by 1"]), file=f)
+        print(''.join([pk1,tables_string,pk2]), file=f)
 
 #MS SQL TABLE INFO MAKER
 def sql_get_table_info_maker():
