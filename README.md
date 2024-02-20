@@ -26,19 +26,21 @@ These python files do long string concatenation for SQL and Snowflake queries ne
 	create_table_empty_pk.txt
 	PKlist.txt
 
-6. Find produced text file in output folder:
+6. Run snf_ddl.py
+
+7. Find produced text file in output folder:
 	snowflake_ddl.txt
 
-7. Run DDL queries in snowflake DEV.
+8. Run DDL queries in snowflake DEV.
 
-8. Create RFC to run DDL queries in snowflake PROD.
+9. Create RFC to run DDL queries in snowflake PROD.
 
-9. Run cadence_bcpio_config_maker.py.
+10. Run cadence_bcpio_config_maker.py.
 
-10. Find produced text files in output folder:
+11. Find produced text files in output folder:
 	dev_bcpio_configs.txt
 	dev_t_file_load_configs.txt
 	prod_bcpio_configs.txt
 	prod_t_file_load_configs.txt
 
-11. Run queries to insert configuration entries for source export and file ingestion in Snowflake DEV and PROD, respectively.
+12. Run queries to insert configuration entries for source export and file ingestion in Snowflake DEV and PROD, respectively.
